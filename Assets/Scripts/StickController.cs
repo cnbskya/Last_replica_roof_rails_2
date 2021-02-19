@@ -5,8 +5,11 @@ using UnityEngine;
 public class StickController : MonoBehaviour
 {
 	public Transform xBotRunning;
+	public GameObject targetGhost;
+	public ParticleSystem electric;
 	public float lerpTime = 10f;
 	public bool relocationBool = false;
+	public float speed; 
 	public float relocaionTime;
 	void Start()
 	{
@@ -19,14 +22,20 @@ public class StickController : MonoBehaviour
 		{
 			Invoke("Relocation", relocaionTime);
 		}
+
+		if(GameManager.instance.isSlide == true)
+		{
+			Vector3 newLerpPosition = new Vector3(targetGhost.transform.position.x, transform.position.y, targetGhost.transform.position.z);
+			transform.position = Vector3.Lerp(transform.position, newLerpPosition, Time.deltaTime * 8);
+		}
 		
+
 	}
 	private void OnTriggerEnter(Collider other)
 	{
 
 		if (other.gameObject.CompareTag("Saw"))
 		{
-
 			other.GetComponent<Collider>().enabled = false;
 			float triggerPointX = other.transform.position.x;
 			float sawScale = other.transform.localScale.x;
@@ -72,6 +81,19 @@ public class StickController : MonoBehaviour
 
 		}
 	}
+
+	private void OnCollisionEnter(Collision collision)
+	{
+		if (collision.gameObject.CompareTag("SlideStick"))
+		{
+			FindObjectOfType<CharacterControlScript>().speed = 10;
+		}
+		else
+		{
+			FindObjectOfType<CharacterControlScript>().speed = 6;
+		}
+	}
+
 	public void Relocation()
 	{
 		transform.position = Vector3.Lerp(transform.position, new Vector3(xBotRunning.position.x, transform.position.y, transform.position.z), lerpTime * Time.deltaTime);

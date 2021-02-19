@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
 {
-	public Transform targetGhost;
+	public GameObject targetGhost;
 	public GameObject stick;
 	public GameObject piece;
 	public Transform right, left;
@@ -17,21 +17,54 @@ public class PlayerAnimator : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		transform.position = Vector3.Lerp(transform.position, targetGhost.position, Time.deltaTime * 8);
+		if (GameManager.instance.isSlide == false)
+		{
+			transform.position = Vector3.Lerp(transform.position, targetGhost.transform.position, Time.deltaTime * 8);
+		}
+
 	}
 
-	// FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- 
+	// FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED 
 	private void OnTriggerEnter(Collider other)
 	{
+		// BONUS
+		CheckBonus(other);
+		// SLİDE PROCES
+		CheckSlide(other);
+	}
+
+	private void OnTriggerExit(Collider other)
+	{
+		Debug.Log("GİRDİDSİFASDİASFDİFDSAİFADSASDİFFADİ");
+		if (other.gameObject.CompareTag("Ground") && GameManager.instance.isSlide == false)
+		{
+			
+			GameManager.instance.isSlide = true;
+			// PARENT CHANGE
+			stick.transform.SetParent(null);
+			gameObject.transform.SetParent(stick.transform);
+			// STİCK TRİGGER AND RİGİDBODY PROCESS
+			stick.GetComponent<Collider>().isTrigger = false;
+			stick.GetComponent<Rigidbody>().useGravity = true;
+
+			targetGhost.AddComponent<Rigidbody>();
+		}
+	}
+
+	// FUNCTIONS
+	public void CheckBonus(Collider other)
+	{
+
 		if (other.gameObject.CompareTag("Bonus"))
 		{
+			Debug.Log("TRİGGER");
 			stick.transform.localScale += new Vector3(0, 0.2f, 0);
 			Destroy(other.gameObject);
 		}
-		// BURAYA BAKILACAK // COLLİSİON İLE YAPTIĞIM İÇİN BİRDEN FAZLASI AYNI ANDA TRİGGERLANABİLİYOR. // -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- 
+
 		else if (other.gameObject.CompareTag("LavBlock"))
 		{
-			
+
 			if (stick.transform.localScale.y >= 0.2f)
 			{
 				stick.transform.localScale -= new Vector3(0, 0.2f, 0);
@@ -46,6 +79,26 @@ public class PlayerAnimator : MonoBehaviour
 			}
 		}
 	}
+	public void CheckSlide(Collider other)
+	{
+		// KAYMA İŞLEMİ BİTİNCE 
+		if (other.gameObject.CompareTag("Ground") && GameManager.instance.isSlide == true)
+		{
+			Destroy(targetGhost.GetComponent<Rigidbody>());
+			targetGhost.transform.position = new Vector3(targetGhost.transform.position.x, other.gameObject.transform.position.y + 15.5f, targetGhost.transform.position.z);
+
+			// PARENT CHANGE
+			GameManager.instance.isSlide = false;
+			gameObject.transform.SetParent(null);
+			stick.transform.SetParent(gameObject.transform);
+			// STİCK TRİGGER AND RİGİDBODY PROCESS
+			stick.GetComponent<Collider>().isTrigger = true;
+			stick.GetComponent<Rigidbody>().useGravity = false;
+			stick.GetComponent<Rigidbody>().isKinematic = true;
+			stick.GetComponent<Rigidbody>().isKinematic = false;
+		}
+	}
+
 }
 
 

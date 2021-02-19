@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public bool isGameOn;
+    public bool isSlide;
     void Start()
     {
         instance = this;
