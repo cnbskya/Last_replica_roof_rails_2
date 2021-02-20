@@ -32,10 +32,20 @@ public class TouchController : MonoBehaviour
 
 			if (Mathf.Abs(distanceVal.x) >= Mathf.Abs(distanceVal.y)) // horizontal movement
 			{
-				Vector3 targetpos = CharacterControlScript.instance.transform.position;
-				targetpos += Vector3.right * distanceVal.x * Time.deltaTime * sens;
-				targetpos.x = Mathf.Clamp(targetpos.x, -2.25f, 2.25f);
-				CharacterControlScript.instance.transform.position = targetpos;
+				if(FindObjectOfType<PlayerAnimator>().largeClamp == false)
+				{
+					Vector3 targetpos = CharacterControlScript.instance.transform.position;
+					targetpos += Vector3.right * distanceVal.x * Time.deltaTime * sens;
+					targetpos.x = Mathf.Clamp(targetpos.x, -2.25f, 2.25f);
+					CharacterControlScript.instance.transform.position = targetpos;
+				}else if (FindObjectOfType<PlayerAnimator>().largeClamp == true)
+				{
+					Vector3 targetpos = CharacterControlScript.instance.transform.position;
+					targetpos += Vector3.right * distanceVal.x * Time.deltaTime * sens;
+					targetpos.x = Mathf.Clamp(targetpos.x, -3.5f, 3.5f);
+					CharacterControlScript.instance.transform.position = targetpos;
+				}
+				
 			}
 		}
 	}

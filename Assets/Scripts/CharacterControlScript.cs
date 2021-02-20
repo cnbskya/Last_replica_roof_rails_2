@@ -5,8 +5,8 @@ using UnityEngine;
 public class CharacterControlScript : MonoBehaviour
 {
     public static CharacterControlScript instance;
-    public Transform player;
-    public int speed;
+    public Transform player;    
+    public float speed;
     //float velocity = 0.5f;
     void Start()
     {

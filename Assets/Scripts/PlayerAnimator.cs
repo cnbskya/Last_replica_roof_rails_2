@@ -8,6 +8,7 @@ public class PlayerAnimator : MonoBehaviour
 	public GameObject stick;
 	public GameObject piece;
 	public Transform right, left;
+	public bool largeClamp;
 
 	Animator animator;
 	void Start()
@@ -36,7 +37,7 @@ public class PlayerAnimator : MonoBehaviour
 	private void OnTriggerExit(Collider other)
 	{
 		Debug.Log("GİRDİDSİFASDİASFDİFDSAİFADSASDİFFADİ");
-		if (other.gameObject.CompareTag("Ground") && GameManager.instance.isSlide == false)
+		if ((other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("GroundEnd")) && GameManager.instance.isSlide == false)
 		{
 			
 			GameManager.instance.isSlide = true;
@@ -77,15 +78,53 @@ public class PlayerAnimator : MonoBehaviour
 			{
 				return;
 			}
+		}else if (other.gameObject.CompareTag("x1"))
+		{
+			Debug.Log(other.gameObject.name);
 		}
+		
 	}
 	public void CheckSlide(Collider other)
 	{
 		// KAYMA İŞLEMİ BİTİNCE 
 		if (other.gameObject.CompareTag("Ground") && GameManager.instance.isSlide == true)
 		{
+			largeClamp = false;
+			FindObjectOfType<CharacterControlScript>().speed = 8.5f;
 			Destroy(targetGhost.GetComponent<Rigidbody>());
-			targetGhost.transform.position = new Vector3(targetGhost.transform.position.x, other.gameObject.transform.position.y + 15.5f, targetGhost.transform.position.z);
+			targetGhost.transform.position = new Vector3(targetGhost.transform.position.x, other.gameObject.transform.position.y + other.gameObject.transform.localScale.y/2 , targetGhost.transform.position.z);
+
+			// PARENT CHANGE
+			GameManager.instance.isSlide = false;
+			gameObject.transform.SetParent(null);
+			stick.transform.SetParent(gameObject.transform);
+			// STİCK TRİGGER AND RİGİDBODY PROCESS
+			stick.GetComponent<Collider>().isTrigger = true;
+			stick.GetComponent<Rigidbody>().useGravity = false;
+			stick.GetComponent<Rigidbody>().isKinematic = true;
+			stick.GetComponent<Rigidbody>().isKinematic = false;
+		}else if (other.gameObject.CompareTag("GroundEnd") && GameManager.instance.isSlide == true)
+		{
+			largeClamp = true;
+			FindObjectOfType<CharacterControlScript>().speed = 7;
+			Destroy(targetGhost.GetComponent<Rigidbody>());
+			targetGhost.transform.position = new Vector3(targetGhost.transform.position.x, other.gameObject.transform.position.y + other.gameObject.transform.localScale.y / 2, targetGhost.transform.position.z);
+
+			// PARENT CHANGE
+			GameManager.instance.isSlide = false;
+			gameObject.transform.SetParent(null);
+			stick.transform.SetParent(gameObject.transform);
+			// STİCK TRİGGER AND RİGİDBODY PROCESS
+			stick.GetComponent<Collider>().isTrigger = true;
+			stick.GetComponent<Rigidbody>().useGravity = false;
+			stick.GetComponent<Rigidbody>().isKinematic = true;
+			stick.GetComponent<Rigidbody>().isKinematic = false;
+		}
+		else if (other.gameObject.CompareTag("GroundBonus")) 
+		{
+			FindObjectOfType<CharacterControlScript>().speed = 7;
+			Destroy(targetGhost.GetComponent<Rigidbody>());
+			targetGhost.transform.position = new Vector3(targetGhost.transform.position.x, other.gameObject.transform.position.y + other.gameObject.transform.localScale.y / 2 + 0.5f, targetGhost.transform.position.z);
 
 			// PARENT CHANGE
 			GameManager.instance.isSlide = false;

@@ -10,6 +10,11 @@ TagManager:
   - Ground
   - GroundEnd
   - SlideStick
+  - Sky
+  - NotSlide
+  - FlagGround
+  - GroundBonus
+  - x1
   layers:
   - Default
   - TransparentFX

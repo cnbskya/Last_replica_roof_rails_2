@@ -86,11 +86,7 @@ public class StickController : MonoBehaviour
 	{
 		if (collision.gameObject.CompareTag("SlideStick"))
 		{
-			FindObjectOfType<CharacterControlScript>().speed = 10;
-		}
-		else
-		{
-			FindObjectOfType<CharacterControlScript>().speed = 6;
+			FindObjectOfType<CharacterControlScript>().speed = 10.5f;
 		}
 	}
 
