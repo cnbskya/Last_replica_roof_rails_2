@@ -15,6 +15,7 @@ TagManager:
   - FlagGround
   - GroundBonus
   - x1
+  - FinishBonus
   layers:
   - Default
   - TransparentFX

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
 {
+	public GameObject[] levelFinishBonus;
 	public GameObject targetGhost;
 	public GameObject stick;
 	public GameObject piece;
@@ -32,11 +33,12 @@ public class PlayerAnimator : MonoBehaviour
 		CheckBonus(other);
 		// SLİDE PROCES
 		CheckSlide(other);
+		//FİNİSH BONUS PROCESS
+		CheckFinishBonus(other);
 	}
 
 	private void OnTriggerExit(Collider other)
 	{
-		Debug.Log("GİRDİDSİFASDİASFDİFDSAİFADSASDİFFADİ");
 		if ((other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("GroundEnd")) && GameManager.instance.isSlide == false)
 		{
 			
@@ -48,7 +50,8 @@ public class PlayerAnimator : MonoBehaviour
 			stick.GetComponent<Collider>().isTrigger = false;
 			stick.GetComponent<Rigidbody>().useGravity = true;
 
-			targetGhost.AddComponent<Rigidbody>();
+			Rigidbody targetRb =  targetGhost.AddComponent<Rigidbody>();
+			targetRb.angularDrag = 0.8f;
 		}
 	}
 
@@ -58,7 +61,6 @@ public class PlayerAnimator : MonoBehaviour
 
 		if (other.gameObject.CompareTag("Bonus"))
 		{
-			Debug.Log("TRİGGER");
 			stick.transform.localScale += new Vector3(0, 0.2f, 0);
 			Destroy(other.gameObject);
 		}
@@ -98,6 +100,8 @@ public class PlayerAnimator : MonoBehaviour
 			GameManager.instance.isSlide = false;
 			gameObject.transform.SetParent(null);
 			stick.transform.SetParent(gameObject.transform);
+			stick.transform.SetParent(gameObject.transform);
+
 			// STİCK TRİGGER AND RİGİDBODY PROCESS
 			stick.GetComponent<Collider>().isTrigger = true;
 			stick.GetComponent<Rigidbody>().useGravity = false;
@@ -114,6 +118,7 @@ public class PlayerAnimator : MonoBehaviour
 			GameManager.instance.isSlide = false;
 			gameObject.transform.SetParent(null);
 			stick.transform.SetParent(gameObject.transform);
+
 			// STİCK TRİGGER AND RİGİDBODY PROCESS
 			stick.GetComponent<Collider>().isTrigger = true;
 			stick.GetComponent<Rigidbody>().useGravity = false;
@@ -124,7 +129,7 @@ public class PlayerAnimator : MonoBehaviour
 		{
 			FindObjectOfType<CharacterControlScript>().speed = 7;
 			Destroy(targetGhost.GetComponent<Rigidbody>());
-			targetGhost.transform.position = new Vector3(targetGhost.transform.position.x, other.gameObject.transform.position.y + other.gameObject.transform.localScale.y / 2 + 0.5f, targetGhost.transform.position.z);
+			targetGhost.transform.position = new Vector3(targetGhost.transform.position.x, other.gameObject.transform.position.y + other.gameObject.transform.localScale.y / 2, targetGhost.transform.position.z);
 
 			// PARENT CHANGE
 			GameManager.instance.isSlide = false;
@@ -138,6 +143,26 @@ public class PlayerAnimator : MonoBehaviour
 		}
 	}
 
+	public void CheckFinishBonus(Collider other)
+	{
+		if (other.gameObject.CompareTag("FinishBonus"))
+		{
+			// BONUSA ÇARPINCA YAPILACAK OLANLAR BURAYA YAZILACAK.
+			GameManager.instance.isGameOn = false;
+			gameObject.transform.SetParent(null);
+			gameObject.transform.eulerAngles = Vector3.zero; // Karakter dik duruyor.
+			stick.GetComponent<Rigidbody>().velocity = Vector3.forward * 500 * Time.deltaTime; // Çubuğa ileri yönlü tek bir sefer hız veriliyor. 
+
+			for (int i = 0; i < levelFinishBonus.Length; i++)
+			{
+				if(other.gameObject.name == levelFinishBonus[i].gameObject.name)
+				{
+					Debug.Log(i);
+					// BONUS AYARLAMA İŞLERİM İ DEĞİŞKENİ ÜZERİNDEN YAPILACAK
+				}
+			}
+		}
+	}
 }
 
 

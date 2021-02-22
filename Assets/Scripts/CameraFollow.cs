@@ -16,23 +16,33 @@ public class CameraFollow : MonoBehaviour
 	// -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- FİXED -- 
 	void Update()
     {
-        Vector3 desiredPosition = new Vector3(0, target.transform.position.y, target.transform.position.z) + offset;
-        Vector3 smoothedPosition = Vector3.Lerp(new Vector3(0,transform.position.y,transform.position.z), desiredPosition, smoothSpeed * Time.deltaTime);
-        transform.position = smoothedPosition;
-
-		if (FindObjectOfType<PlayerAnimator>().stick.transform.localScale.y >= 2.2f)
+		if (GameManager.instance.isGameOn)
 		{
-			offset = new Vector3(0, 7, -5);
-			Vector3 newDesiredPosition = new Vector3(0, target.transform.position.y, target.transform.position.z) + offset;
-			Vector3 newSmoothedPosition = Vector3.MoveTowards(new Vector3(0, transform.position.y, transform.position.z), newDesiredPosition, smoothSpeed * Time.deltaTime);
-			transform.position = newSmoothedPosition;
+			Vector3 desiredPosition = new Vector3(0, target.transform.position.y, target.transform.position.z) + offset;
+			Vector3 smoothedPosition = Vector3.Lerp(new Vector3(0, transform.position.y, transform.position.z), desiredPosition, smoothSpeed * Time.deltaTime);
+			transform.position = smoothedPosition;
+
+			if (FindObjectOfType<PlayerAnimator>().stick.transform.localScale.y >= 2.2f)
+			{
+				offset = new Vector3(0, 7, -5);
+				Vector3 newDesiredPosition = new Vector3(0, target.transform.position.y, target.transform.position.z) + offset;
+				Vector3 newSmoothedPosition = Vector3.MoveTowards(new Vector3(0, transform.position.y, transform.position.z), newDesiredPosition, smoothSpeed * Time.deltaTime);
+				transform.position = newSmoothedPosition;
+			}
+			else
+			{
+				offset = new Vector3(0, 5, -1);
+				Vector3 newDesiredPosition = new Vector3(0, target.transform.position.y, target.transform.position.z) + offset;
+				Vector3 newSmoothedPosition = Vector3.MoveTowards(new Vector3(0, transform.position.y, transform.position.z), newDesiredPosition, smoothSpeed * Time.deltaTime);
+				transform.position = newSmoothedPosition;
+			}
 		}
 		else
 		{
-			offset = new Vector3(0, 5, -1);
-			Vector3 newDesiredPosition = new Vector3(0, target.transform.position.y, target.transform.position.z) + offset;
-			Vector3 newSmoothedPosition = Vector3.MoveTowards(new Vector3(0, transform.position.y, transform.position.z), newDesiredPosition, smoothSpeed * Time.deltaTime);
-			transform.position = newSmoothedPosition;
+			Vector3 desiredPosition = new Vector3(target.transform.position.x, target.transform.position.y + 5, target.transform.position.z - 5);
+			Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
+			transform.position = smoothedPosition;
 		}
+        
 	}
 }

@@ -25,8 +25,12 @@ public class StickController : MonoBehaviour
 
 		if(GameManager.instance.isSlide == true)
 		{
-			Vector3 newLerpPosition = new Vector3(targetGhost.transform.position.x, transform.position.y, targetGhost.transform.position.z);
-			transform.position = Vector3.Lerp(transform.position, newLerpPosition, Time.deltaTime * 8);
+			if (GameManager.instance.isGameOn)
+			{
+				Vector3 newLerpPosition = new Vector3(targetGhost.transform.position.x, transform.position.y, targetGhost.transform.position.z);
+				transform.position = Vector3.Lerp(transform.position, newLerpPosition, Time.deltaTime * 8);
+			}
+			
 		}
 		
 
