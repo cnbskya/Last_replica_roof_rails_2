@@ -3,7 +3,12 @@ guid: 1738e46e55db22c48aea7a70f1df557c
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Saw_Blade
+    second: {fileID: 2100000, guid: f72fe6f8a1210fb4da52b78b1d064a98, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

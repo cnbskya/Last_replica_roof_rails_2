@@ -51,7 +51,7 @@ public class PlayerAnimator : MonoBehaviour
 			stick.GetComponent<Rigidbody>().useGravity = true;
 
 			Rigidbody targetRb =  targetGhost.AddComponent<Rigidbody>();
-			targetRb.angularDrag = 0.8f;
+			targetRb.angularDrag = 0.65f;
 		}
 	}
 
@@ -80,9 +80,6 @@ public class PlayerAnimator : MonoBehaviour
 			{
 				return;
 			}
-		}else if (other.gameObject.CompareTag("x1"))
-		{
-			Debug.Log(other.gameObject.name);
 		}
 		
 	}

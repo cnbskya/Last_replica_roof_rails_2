@@ -16,6 +16,7 @@ TagManager:
   - GroundBonus
   - x1
   - FinishBonus
+  - Diamond
   layers:
   - Default
   - TransparentFX
