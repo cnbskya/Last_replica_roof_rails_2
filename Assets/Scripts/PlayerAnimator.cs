@@ -11,7 +11,7 @@ public class PlayerAnimator : MonoBehaviour
 	public Transform right, left;
 	public bool largeClamp;
 
-	Animator animator;
+	public Animator animator;
 	void Start()
 	{
 		animator = GetComponent<Animator>();
@@ -19,9 +19,20 @@ public class PlayerAnimator : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		if (GameManager.instance.isSlide == true && FindObjectOfType<TriggerFail>().ayrildi == true)
+		{
+			Vector3 newLerpPosition = new Vector3(targetGhost.transform.position.x, transform.position.y, targetGhost.transform.position.z);
+			transform.position = Vector3.Lerp(transform.position, newLerpPosition, Time.deltaTime * 8);
+		}
+
 		if (GameManager.instance.isSlide == false)
 		{
 			transform.position = Vector3.Lerp(transform.position, targetGhost.transform.position, Time.deltaTime * 8);
+			animator.SetBool("startFly", false);
+		}
+		else
+		{
+			animator.SetBool("startFly", true);
 		}
 
 	}
@@ -95,6 +106,7 @@ public class PlayerAnimator : MonoBehaviour
 
 			// PARENT CHANGE
 			GameManager.instance.isSlide = false;
+			
 			gameObject.transform.SetParent(null);
 			stick.transform.SetParent(gameObject.transform);
 			stick.transform.SetParent(gameObject.transform);
@@ -125,13 +137,17 @@ public class PlayerAnimator : MonoBehaviour
 		else if (other.gameObject.CompareTag("GroundBonus")) 
 		{
 			FindObjectOfType<CharacterControlScript>().speed = 7;
+			GameManager.instance.isSlide = false;
+			animator.SetBool("startIdle", true);
 			Destroy(targetGhost.GetComponent<Rigidbody>());
-			targetGhost.transform.position = new Vector3(targetGhost.transform.position.x, other.gameObject.transform.position.y + other.gameObject.transform.localScale.y / 2, targetGhost.transform.position.z);
-
+			targetGhost.transform.position = new Vector3(targetGhost.transform.position.x,(other.gameObject.transform.position.y + other.gameObject.transform.localScale.y / 2) + 0.5f, gameObject.transform.position.z);
+			Destroy(GetComponent<Rigidbody>());
+			transform.eulerAngles = Vector3.zero;
 			// PARENT CHANGE
 			GameManager.instance.isSlide = false;
-			gameObject.transform.SetParent(null);
-			stick.transform.SetParent(gameObject.transform);
+			//gameObject.transform.SetParent(null);
+			//stick.transform.SetParent(gameObject.transform);
+			animator.SetBool("startIdle", true);
 			// STİCK TRİGGER AND RİGİDBODY PROCESS
 			stick.GetComponent<Collider>().isTrigger = true;
 			stick.GetComponent<Rigidbody>().useGravity = false;
@@ -147,7 +163,8 @@ public class PlayerAnimator : MonoBehaviour
 			// BONUSA ÇARPINCA YAPILACAK OLANLAR BURAYA YAZILACAK.
 			GameManager.instance.isGameOn = false;
 			gameObject.transform.SetParent(null);
-			gameObject.transform.eulerAngles = Vector3.zero; // Karakter dik duruyor.
+			InputManager.instance.GameOver();
+			
 			stick.GetComponent<Rigidbody>().velocity = Vector3.forward * 500 * Time.deltaTime; // Çubuğa ileri yönlü tek bir sefer hız veriliyor. 
 
 			for (int i = 0; i < levelFinishBonus.Length; i++)

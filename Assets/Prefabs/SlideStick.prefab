@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1302195918803764069}
   - component: {fileID: 1302195918803764070}
   - component: {fileID: 1302195918803764071}
+  - component: {fileID: 7325295276444489336}
   m_Layer: 0
   m_Name: SlideStick
   m_TagString: SlideStick
@@ -111,3 +112,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &7325295276444489336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302195918803764072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d418284f498930148a80ed9cb80655b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  electricPrefab: {fileID: 2580014806348797086, guid: 181907dc813289c469000f27d566d3c4,
+    type: 3}

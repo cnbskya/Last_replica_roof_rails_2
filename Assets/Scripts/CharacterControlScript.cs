@@ -16,7 +16,7 @@ public class CharacterControlScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.instance.isGameOn == true)
+        if (GameManager.instance.isGameOn == true && InputManager.instance.uıIsActif == false)
         {
             transform.position += transform.forward * speed * Time.deltaTime;        
         }
